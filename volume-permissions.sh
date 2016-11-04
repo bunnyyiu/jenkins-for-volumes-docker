@@ -1,7 +1,13 @@
 #!/bin/bash -e
 
-if [ "$(whoami)" == "root" ]; then
+: ${SOCKET:=/var/run/docker.sock}
+: ${PORT:=2375}
 
+if [ -e $SOCKET ]; then
+  socat -d -d TCP-L:${PORT},fork UNIX:${SOCKET} &
+fi
+
+if [ "$(whoami)" == "root" ]; then
   # if root owns the jenkins home, change it to the jenkins user
   if [ "$(stat -c '%U' $JENKINS_HOME)" == "root" ]; then
     echo "Setting Jenkins home ownership to jenkins user"

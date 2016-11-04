@@ -1,4 +1,4 @@
-FROM jenkins
+FROM jenkins:2.7.4
 
 USER root
 
@@ -9,6 +9,8 @@ RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4
   && gpg --verify /usr/local/bin/gosu.asc \
   && rm /usr/local/bin/gosu.asc \
   && chmod +x /usr/local/bin/gosu
+
+RUN apt-get update && apt-get install socat && apt-get clean
 
 COPY volume-permissions.sh /usr/local/bin/volume-permissions.sh
 
